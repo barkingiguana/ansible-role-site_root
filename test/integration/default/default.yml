@@ -1,0 +1,21 @@
+---
+- hosts: all
+  vars:
+    site_root_users:
+      - user:
+        username: admin1
+        uid: 10001
+        shell: /bin/sh
+        authorized_keys:
+          - "ssh-rsa key1 comment1"
+      - user:
+        username: admin2
+        uid: 10002
+        gid: 50002
+        authorized_keys:
+          - "ssh-rsa key2 comment2"
+          - "ssh-rsa key3 comment3"
+    site_root_wheel_group_name: admingrp
+    site_root_wheel_group_id: 50001
+  roles:
+    - barkingiguana.site_root

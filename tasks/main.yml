@@ -1,0 +1,16 @@
+---
+- name: "Create wheel group {{ site_root_wheel_group_name }}"
+  become: yes
+  group:
+    name: "{{ site_root_wheel_group_name }}"
+    gid: "{{ site_root_wheel_group_id }}"
+
+- name: "Sudo without password for site wheel group {{ site_root_wheel_group_name }}"
+  become: yes
+  lineinfile:
+    dest: /etc/sudoers
+    line: "%{{ site_root_wheel_group_name }} ALL=(ALL:ALL) NOPASSWD:ALL"
+    validate: "visudo -cf %s"
+
+- include: create_user.yml
+  with_items: site_root_users

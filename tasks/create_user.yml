@@ -1,0 +1,28 @@
+---
+- name: Capture variables for user
+  set_fact:
+    user: "{{ item }}"
+    group_name: "{{ item.group | default(item.username) }}"
+    group_id: "{{ item.gid | default(item.uid) }}"
+
+- name: "Create group {{ group_name }}"
+  become: yes
+  group:
+    name: "{{ group_name }}"
+    gid: "{{ group_id }}"
+
+- name: "Add user {{ user.username }}"
+  become: yes
+  user:
+    name: "{{ user.username }}"
+    shell: "{{ user.shell | default('/bin/bash') }}"
+    uid: "{{ user.uid }}"
+    group: "{{ group_name }}"
+    groups: "{{ site_root_wheel_group_name }}"
+
+- name: "Create authorized_keys file for user {{ user.username }}"
+  become: yes
+  authorized_key:
+    user: "{{ user.username }}"
+    key: "{{ user.authorized_keys | join('\n') }}"
+    exclusive: yes
