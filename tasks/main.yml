@@ -13,4 +13,4 @@
     validate: "visudo -cf %s"
 
 - include: create_user.yml
-  with_items: site_root_users
+  with_items: "{{ site_root_users }}"
