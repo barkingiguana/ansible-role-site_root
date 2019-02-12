@@ -3,6 +3,7 @@
   set_fact:
     user: "{{ item }}"
     group_name: "{{ item.group | default(item.username) }}"
+    extra_groups: "{{ item.groups | default([]) }}"
     group_id: "{{ item.gid | default(item.uid) }}"
 
 - name: "Create group {{ group_name }}"
@@ -11,14 +12,18 @@
     name: "{{ group_name }}"
     gid: "{{ group_id }}"
 
-- name: "Add user {{ user.username }}"
+- name: Calculate user groups
+  set_fact:
+    user_groups: "{{ (user.wheel | default(site_root_default_add_to_wheel)) | ternary([site_root_wheel_group_name] + extra_groups, extra_groups) }}"
+
+- name: "Add user {{ user.username }} (groups: {{ user_groups | join(', ') }})"
   become: yes
   user:
     name: "{{ user.username }}"
     shell: "{{ user.shell | default('/bin/bash') }}"
     uid: "{{ user.uid }}"
     group: "{{ group_name }}"
-    groups: "{{ site_root_wheel_group_name }}"
+    groups: "{{ user_groups }}"
 
 - name: "Create authorized_keys file for user {{ user.username }}"
   become: yes

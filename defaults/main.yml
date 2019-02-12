@@ -2,3 +2,4 @@
 site_root_users: []
 site_root_wheel_group_name: siteroot
 site_root_wheel_group_id: 50000
+site_root_default_add_to_wheel: true

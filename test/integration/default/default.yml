@@ -13,8 +13,23 @@
         uid: 10002
         gid: 50002
         authorized_keys:
-          - "ssh-rsa key2 comment2"
+          - "ssh-rsa key2.1 comment2.1"
+          - "ssh-rsa key2.2 comment2.2"
+      - user:
+        username: admin3
+        uid: 10003
+        gid: 10003
+        authorized_keys:
           - "ssh-rsa key3 comment3"
+        groups:
+          - audio
+      - user:
+        username: person1
+        uid: 10004
+        shell: /bin/dash
+        authorized_keys:
+          - "ssh-rsa key4 comment4"
+        wheel: false
     site_root_wheel_group_name: admingrp
     site_root_wheel_group_id: 50001
   roles:
